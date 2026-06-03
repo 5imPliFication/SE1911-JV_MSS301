@@ -2,7 +2,7 @@ package com.talenthub.job.application.usecase;
 
 import com.talenthub.job.application.command.JobCommand;
 import com.talenthub.job.domain.aggregate.JobAggregate;
-import com.talenthub.job.domain.exception.DuplicateJobTitleException;
+import com.talenthub.job.domain.exception.JobNotFoundException;
 import com.talenthub.job.domain.repository.JobRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,24 +12,21 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class CreateNewJobUseCase {
+public class UpdateJobUseCase {
 
     private final JobRepository jobRepository;
 
     @Transactional
-    public UUID execute(JobCommand command) {
-        if (jobRepository.isExisted(command.getTitle())) {
-            throw new DuplicateJobTitleException(command.getTitle());
-        }
-
-        JobAggregate aggregate = JobAggregate.createJob(
+    public JobAggregate execute(UUID id, JobCommand command) {
+        JobAggregate aggregate = jobRepository.findById(id)
+                .orElseThrow(() -> new JobNotFoundException(id));
+        aggregate.update(
                 command.getTitle(),
                 command.getDescription(),
                 command.getDepartmentId(),
                 command.getMinSalary(),
                 command.getMaxSalary(),
                 command.getDeadline());
-
-        return jobRepository.save(aggregate).getId();
+        return jobRepository.save(aggregate);
     }
 }

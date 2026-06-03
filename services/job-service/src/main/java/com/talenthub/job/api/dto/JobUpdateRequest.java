@@ -5,8 +5,6 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -14,7 +12,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @ToString
-public class JobCreateRequest {
+public class JobUpdateRequest {
 
     @NotBlank
     @Size(max = 200)
@@ -25,8 +23,6 @@ public class JobCreateRequest {
 
     @NotNull
     private UUID departmentId;
-
-    private Set<String> requiredSkills = new HashSet<>();
 
     @NotNull
     @DecimalMin(value = "0.0", inclusive = false)

@@ -1,17 +1,21 @@
-package com.talenthub.job.domain.entity;
+package com.talenthub.job.infrastructure.persistence.entity;
 
+import com.talenthub.web.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.UUID;
 
-@Getter@Setter
-@NoArgsConstructor@AllArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "job_skills",
-       uniqueConstraints = @UniqueConstraint(columnNames = {"job_id", "skill_id"}))
-@EqualsAndHashCode(of = {"jobId", "skillId"})
-public class JobSkill {
+        uniqueConstraints = @UniqueConstraint(columnNames = {"job_id", "skill_id"}))
+@EqualsAndHashCode(of = {"jobId", "skillId"}, callSuper = false)
+public class JobSkill extends BaseEntity {
 
     public enum Level {
         BEGINNER, INTERMEDIATE, ADVANCED, EXPERT
@@ -33,5 +37,4 @@ public class JobSkill {
 
     @Column(name = "is_mandatory", nullable = false)
     private boolean mandatory;
-
 }
